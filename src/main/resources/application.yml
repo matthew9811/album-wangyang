@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
+    url: jdbc:mysql://106.52.247.35/wang?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: Ll123456+
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT1FROMDUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat,wall,log4j
+    logSlowSql: true
+  jmx:
+    default-domain: wangyang
+server:
+  servlet:
+    context-path: /wangyang
+cos:
+  tengxun:
+    APPID: 1256569009
+    #公钥
+    accessKey: AKIDiJgneGs24sQlrg4xKSM1tWt1zjEjR43m
+    #密钥
+    secretKey: ctvjHgy1pMdfV6S8ankWVGl1C8pzua2G
+    #桶区域
+    bucket: ap-chengdu
+    #桶名称
+    bucketName: 47-1256569009
+    #访问路径
+    path: https://47-1256569009.cos.ap-chengdu.myqcloud.com
+    #路径前缀
+    prefix: wangyang
