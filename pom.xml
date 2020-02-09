@@ -24,6 +24,8 @@
         <druid-version>1.1.10</druid-version>
         <hutool-version>4.1.19</hutool-version>
         <cos-sdk-version>5.6.8</cos-sdk-version>
+        <snakeyaml-version>1.17</snakeyaml-version>
+        <commons-io-version>2.4</commons-io-version>
     </properties>
 
     <dependencies>
@@ -89,6 +91,7 @@
             <artifactId>cos_api</artifactId>
             <version>${cos-sdk-version}</version>
         </dependency>
+
     </dependencies>
 
     <repositories>

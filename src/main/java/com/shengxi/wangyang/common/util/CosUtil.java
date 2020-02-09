@@ -7,12 +7,10 @@ import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.region.Region;
-import com.shengxi.wangyang.common.util.KeyUtil;
 import java.io.File;
-import java.util.ResourceBundle;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import java.util.Properties;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * 配置cos
@@ -42,13 +40,15 @@ public class CosUtil {
     private static COSClient cosClient;
 
     static {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
-        accessKey = resourceBundle.getString("cos.tengxun.accessKey");
-        secretKey = resourceBundle.getString("cos.tengxun.secretKey");
-        bucket = resourceBundle.getString("cos.tengxun.bucket");
-        bucketName = resourceBundle.getString("cos.tengxun.bucketName");
-        path = resourceBundle.getString("cos.tengxun.path");
-        prefix = resourceBundle.getString("os.tengxun.prefix");
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(new ClassPathResource("application-cos.yml"));
+        Properties properties = yaml.getObject();
+        accessKey = (String) properties.get("cos.tengxun.accessKey");
+        secretKey = (String) properties.get("cos.tengxun.secretKey");
+        bucket = (String) properties.get("cos.tengxun.bucket");
+        bucketName = (String) properties.get("cos.tengxun.bucketName");
+        path = (String) properties.get("cos.tengxun.path");
+        prefix = (String) properties.get("cos.tengxun.prefix");
         // 1 初始化用户身份信息(s ecretId, secretKey)
         COSCredentials cred = new BasicCOSCredentials(accessKey, secretKey);
         // 2 设置bucket的区域, COS地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
@@ -64,10 +64,10 @@ public class CosUtil {
      * @param uploadFile file 需要上传的文件
      * @return 返回对应的信息
      */
-    public static String upload(File uploadFile) {
+    public static String upload(File uploadFile, String fileFormat) {
         PutObjectRequest putObjectRequest;
         try {
-            putObjectRequest = new PutObjectRequest(bucketName, KeyUtil.getKey(), uploadFile);
+            putObjectRequest = new PutObjectRequest(bucketName, KeyUtil.getKey().concat(fileFormat), uploadFile);
             cosClient.putObject(putObjectRequest);
         } finally {
             cosClient.shutdown();
