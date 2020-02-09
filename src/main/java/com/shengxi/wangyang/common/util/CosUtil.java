@@ -1,6 +1,7 @@
 package com.shengxi.wangyang.common.util;
 
 
+import cn.hutool.core.io.FileTypeUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
@@ -78,7 +79,7 @@ public class CosUtil {
     public static String upload(String bucketName, File uploadFile) {
         PutObjectRequest putObjectRequest;
         try {
-            putObjectRequest = new PutObjectRequest(bucketName, KeyUtil.getKey(), uploadFile);
+            putObjectRequest = new PutObjectRequest(bucketName, KeyUtil.getKey().concat(".".concat(FileTypeUtil.getType(uploadFile))), uploadFile);
             cosClient.putObject(putObjectRequest);
         } finally {
             cosClient.shutdown();
