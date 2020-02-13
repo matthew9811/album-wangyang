@@ -1,5 +1,6 @@
 package com.shengxi.wangyang;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -13,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @since 1.0
  */
 @EnableWebMvc
+@MapperScan("com.shengxi.wangyang.mapper")
 @SpringBootApplication
-//@EnableConfigurationProperties({CosConfig.class})
 public class AlbumApplication {
 
     public static void main(String[] args) {

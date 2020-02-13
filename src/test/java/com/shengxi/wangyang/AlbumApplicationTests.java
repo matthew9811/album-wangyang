@@ -1,6 +1,7 @@
 package com.shengxi.wangyang;
 
 import cn.hutool.core.io.FileTypeUtil;
+import com.shengxi.wangyang.common.util.AtlaUtil;
 import com.shengxi.wangyang.common.util.CosUtil;
 import java.io.File;
 import java.util.Properties;
@@ -39,6 +40,11 @@ public class AlbumApplicationTests {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void testGetAddress(){
+        System.out.println(AtlaUtil.getLocalAddress("116.481488,39.990464"));
     }
 
 }

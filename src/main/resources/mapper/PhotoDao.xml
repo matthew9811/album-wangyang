@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shengxi.wangyang.mapper.PhotoDao">
+  <resultMap id="BaseResultMap" type="com.shengxi.wangyang.entity.Photo">
+    <id column="photo_id" jdbcType="INTEGER" property="id" />
+    <result column="photo_link" jdbcType="VARCHAR" property="link" />
+    <result column="photo_customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="photo_upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="photo_area" jdbcType="VARCHAR" property="area" />
+    <result column="photo_filming_time" jdbcType="DATE" property="filmingTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    photo.id as photo_id, photo.link as photo_link, photo.customer_id as photo_customer_id, 
+    photo.upload_time as photo_upload_time, photo.area as photo_area, photo.filming_time as photo_filming_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from photo photo
+    where photo.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from photo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Photo" useGeneratedKeys="true">
+    insert into photo (link, customer_id, upload_time, 
+      area, filming_time)
+    values (#{link,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, #{uploadTime,jdbcType=TIMESTAMP}, 
+      #{area,jdbcType=VARCHAR}, #{filmingTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Photo" useGeneratedKeys="true">
+    insert into photo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="link != null">
+        link,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="uploadTime != null">
+        upload_time,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="filmingTime != null">
+        filming_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="filmingTime != null">
+        #{filmingTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shengxi.wangyang.entity.Photo">
+    update photo
+    <set>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="filmingTime != null">
+        filming_time = #{filmingTime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shengxi.wangyang.entity.Photo">
+    update photo
+    set link = #{link,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      area = #{area,jdbcType=VARCHAR},
+      filming_time = #{filmingTime,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

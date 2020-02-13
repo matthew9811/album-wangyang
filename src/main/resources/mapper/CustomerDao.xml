@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shengxi.wangyang.mapper.CustomerDao">
+  <resultMap id="BaseResultMap" type="com.shengxi.wangyang.entity.Customer">
+    <id column="customer_id" jdbcType="INTEGER" property="id" />
+    <result column="customer_openid" jdbcType="VARCHAR" property="openid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    customer.id as customer_id, customer.openid as customer_openid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer customer
+    where customer.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Customer" useGeneratedKeys="true">
+    insert into customer (openid)
+    values (#{openid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Customer" useGeneratedKeys="true">
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="openid != null">
+        openid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shengxi.wangyang.entity.Customer">
+    update customer
+    <set>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shengxi.wangyang.entity.Customer">
+    update customer
+    set openid = #{openid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
