@@ -3,9 +3,7 @@ package com.shengxi.wangyang;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
  * 启动主方法
@@ -15,6 +13,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  * @date 2020-01-27 20:15:14
  * @since 1.0
  */
+
 @EnableWebMvc
 @MapperScan("com.shengxi.wangyang.mapper")
 @SpringBootApplication

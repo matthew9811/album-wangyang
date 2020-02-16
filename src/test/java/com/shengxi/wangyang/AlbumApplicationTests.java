@@ -1,10 +1,8 @@
 package com.shengxi.wangyang;
 
-import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.json.JSONObject;
 import com.shengxi.wangyang.common.util.AtlaUtil;
-import com.shengxi.wangyang.common.util.CosUtil;
 import com.shengxi.wangyang.common.util.WeChatUtil;
-import java.io.File;
 import java.util.Properties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,12 +19,12 @@ public class AlbumApplicationTests {
     public void contextLoads() {
     }
 
-
-    @Test
-    public void testUpload() {
-        File file = new File("D:/浏览器下载/斯嘉丽.jpg");
-        System.out.println(CosUtil.upload(file, ".".concat(FileTypeUtil.getType(file))));
-    }
+//
+//    @Test
+//    public void testUpload() {
+//        File file = new File("D:/浏览器下载/斯嘉丽.jpg");
+//        System.out.println(CosUtil.upload(file, ".".concat(FileTypeUtil.getType(file))));
+//    }
 
 
     @Test
@@ -52,7 +50,8 @@ public class AlbumApplicationTests {
 
     @Test
     public void testGetWechatApi(){
-        WeChatUtil.getLoginSession("13546");
+        JSONObject loginSession = WeChatUtil.getLoginSession("033HnHQ127txcT0f8QQ12JpoQ12HnHQz");
+        System.out.println(loginSession);
     }
 
 }

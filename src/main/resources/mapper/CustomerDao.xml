@@ -18,9 +18,9 @@
     delete from customer
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Customer" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="String" useGeneratedKeys="true">
     insert into customer (openid)
-    values (#{openid,jdbcType=VARCHAR})
+    value (#{openid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Customer" useGeneratedKeys="true">
     insert into customer

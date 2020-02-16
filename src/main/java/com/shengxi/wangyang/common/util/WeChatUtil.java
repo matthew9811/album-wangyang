@@ -3,6 +3,8 @@ package com.shengxi.wangyang.common.util;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,16 +51,19 @@ public class WeChatUtil {
     /**
      * https://api.weixin.qq.com/sns/jscode2session?
      * appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
+     *
      * @return
      */
-    public static String getLoginSession(String jsCode) {
+    public static JSONObject getLoginSession(String jsCode) {
         String url = wechatApiUrl + "?appid=" + appid + "&" + "secret=" + secret + "&"
                 + "js_code=" + jsCode + "&" + "gramt_type=" + grantType;
         logger.info("发起请求的url为：{}", url);
         HttpRequest get = HttpUtil.createGet(url);
         HttpResponse execute = get.execute();
+
+        logger.info("响应的结果为: {}", execute);
         execute.close();
-        return execute.body();
+        return JSONUtil.parseObj(execute.body());
     }
 
 
