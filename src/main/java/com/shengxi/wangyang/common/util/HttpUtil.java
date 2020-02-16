@@ -1,5 +1,9 @@
 package com.shengxi.wangyang.common.util;
 
+import cn.hutool.json.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class HttpUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
     /**
      * 向目的URL发送get请求
@@ -27,13 +32,21 @@ public class HttpUtil {
      */
     public static String sendGetRequest(String url, MultiValueMap<String, String> params, HttpHeaders headers) {
         RestTemplate httpClient = new RestTemplate();
-        HttpMethod method = HttpMethod.GET;
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         //将请求头部和参数合成一个请求
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
         //执行HTTP请求，将返回的结构使用String 类格式化
-        ResponseEntity<String> response = httpClient.exchange(url, method, requestEntity, String.class);
+        ResponseEntity<String> response = httpClient.exchange(url, HttpMethod.GET, requestEntity, String.class);
         return response.getBody();
+    }
+
+    public static Object getRequestForUrl(String url) {
+        RestTemplate httpClient = new RestTemplate();
+        logger.info("发起对外请求，url为：{}", url);
+        Object forObject = httpClient.getForObject(url, Object.class);
+        logger.info("响应为：{}", forObject);
+
+        return forObject;
     }
 
     /**
@@ -47,14 +60,12 @@ public class HttpUtil {
         RestTemplate client = new RestTemplate();
         //新建Http头，add方法可以添加参数
         HttpHeaders headers = new HttpHeaders();
-        //设置请求发送方式
-        HttpMethod method = HttpMethod.POST;
         // 以表单的方式提交
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         //将请求头部和参数合成一个请求
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
         //执行HTTP请求，将返回的结构使用String 类格式化（可设置为对应返回值格式的类）
-        ResponseEntity<String> response = client.exchange(url, method, requestEntity, String.class);
+        ResponseEntity<String> response = client.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
         return response.getBody();
     }

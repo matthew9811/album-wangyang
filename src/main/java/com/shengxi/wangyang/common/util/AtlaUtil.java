@@ -3,6 +3,7 @@ package com.shengxi.wangyang.common.util;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import lombok.Data;
@@ -56,14 +57,10 @@ public class AtlaUtil {
      * @param location string x,y
      * @return string 参考地址
      */
-    public static String getLocalAddress(String location) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("key", "UZABZ-OTEWW-4B7RZ-OIGO7-FEN46-NHBD4");
-//        params.add("batch", batch);
-//        params.add("location", location);
-//        params.add("sig", "aIgDeiHvrUk8eD9QQGA3pfezzcpyLI4");
-        return HttpUtil.sendGetRequest("https://apis.map.qq.com/ws/geocoder/v1?" +
-                "key=UZABZ-OTEWW-4B7RZ-OIGO7-FEN46-NHBD4&location=28.7033487,115.8660847", params, new HttpHeaders());
+    public static Object getLocalAddress(String location) {
+        String url = mapUrl.concat("key=" + key + "&" + "location=" + location);
+
+        return (LinkedHashMap)HttpUtil.getRequestForUrl(url);
     }
 
 

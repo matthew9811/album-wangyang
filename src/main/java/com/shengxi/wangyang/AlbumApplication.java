@@ -24,18 +24,4 @@ public class AlbumApplication {
         SpringApplication.run(AlbumApplication.class, args);
     }
 
-    /**
-     * 配置页面的路径配置
-     * 简单配置页面的路径前缀和后缀
-     *
-     * @return resolver InternalResourceViewResolver
-     */
-    @Bean
-    public InternalResourceViewResolver setupViewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("templates/");
-        resolver.setSuffix(".html");
-        return resolver;
-    }
-
 }

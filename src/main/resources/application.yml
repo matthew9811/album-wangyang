@@ -41,10 +41,10 @@ logging:
   config: classpath:log/logback-spring.xml
   path: /log
 atla:
-  # 高德请求的url
-  url: https://restapi.amap.com/v3/geocode/regeo?
+  # 腾讯地图请求的url
+  url: https://apis.map.qq.com/ws/geocoder/v1?
   # 根据实际地址转换经纬度的高德API 使用的 KEY
-  key: 406ed86f4607f94f378a5fa83d96c5b2
+  key: UZABZ-OTEWW-4B7RZ-OIGO7-FEN46-NHBD4
   #开启批量查询，最多20个并发
   batch: true
 #网络代理信息

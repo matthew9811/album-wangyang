@@ -3,6 +3,7 @@ package com.shengxi.wangyang;
 import cn.hutool.core.io.FileTypeUtil;
 import com.shengxi.wangyang.common.util.AtlaUtil;
 import com.shengxi.wangyang.common.util.CosUtil;
+import com.shengxi.wangyang.common.util.WeChatUtil;
 import java.io.File;
 import java.util.Properties;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class AlbumApplicationTests {
     public void testYaml() {
         try {
             YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-            yaml.setResources(new ClassPathResource("application-cos.yml"));
+            yaml.setResources(new ClassPathResource("application-tengxun.yml"));
             Properties properties = yaml.getObject();
             properties.forEach((k, v) -> System.out.println(k + " : " + v));
             System.out.println();
@@ -44,7 +45,14 @@ public class AlbumApplicationTests {
 
     @Test
     public void testGetAddress(){
-        System.out.println(AtlaUtil.getLocalAddress("116.481488,39.990464"));
+        Object localAddress = AtlaUtil.getLocalAddress("39.984154,116.307490");
+        System.out.println(localAddress);
+        System.out.println();
+    }
+
+    @Test
+    public void testGetWechatApi(){
+        WeChatUtil.getLoginSession("13546");
     }
 
 }

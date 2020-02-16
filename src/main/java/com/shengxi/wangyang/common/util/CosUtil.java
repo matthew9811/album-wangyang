@@ -42,14 +42,14 @@ public class CosUtil {
 
     static {
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-        yaml.setResources(new ClassPathResource("application-cos.yml"));
+        yaml.setResources(new ClassPathResource("application-tengxun.yml"));
         Properties properties = yaml.getObject();
-        accessKey = (String) properties.get("cos.tengxun.accessKey");
-        secretKey = (String) properties.get("cos.tengxun.secretKey");
-        bucket = (String) properties.get("cos.tengxun.bucket");
-        bucketName = (String) properties.get("cos.tengxun.bucketName");
-        path = (String) properties.get("cos.tengxun.path");
-        prefix = (String) properties.get("cos.tengxun.prefix");
+        accessKey = (String) properties.get("tengxun.cos.accessKey");
+        secretKey = (String) properties.get("tengxun.cos.secretKey");
+        bucket = (String) properties.get("tengxun.cos.bucket");
+        bucketName = (String) properties.get("tengxun.cos.bucketName");
+        path = (String) properties.get("tengxun.cos.path");
+        prefix = (String) properties.get("tengxun.cos.prefix");
         // 1 初始化用户身份信息(s ecretId, secretKey)
         COSCredentials cred = new BasicCOSCredentials(accessKey, secretKey);
         // 2 设置bucket的区域, COS地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
