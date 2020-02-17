@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 
 @EnableWebMvc
-@MapperScan("com.shengxi.wangyang.mapper")
+@MapperScan("com.shengxi.wangyang.mapper.*")
 @SpringBootApplication
 public class AlbumApplication {
 

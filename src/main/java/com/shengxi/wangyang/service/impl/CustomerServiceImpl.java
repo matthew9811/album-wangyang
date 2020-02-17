@@ -1,5 +1,6 @@
 package com.shengxi.wangyang.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import com.shengxi.wangyang.common.util.WeChatUtil;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
@@ -18,9 +19,11 @@ public class CustomerServiceImpl implements CustomerService {
     public ApiResponse login(String jsCode) {
         JSONObject loginSession = WeChatUtil.getLoginSession(jsCode);
         String openid = loginSession.getStr("openid");
-        int num = customerDao.insert(openid);
-        if (num > 0) {
-            return ApiResponse.ofStatus(ApiResponse.Status.SUCCESS);
+        if (ObjectUtil.isNotNull(openid)) {
+            int num = customerDao.insert(openid);
+            if (num > 0) {
+                return ApiResponse.ofMessage(200, openid);
+            }
         }
         return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
     }
