@@ -1,6 +1,5 @@
 package com.shengxi.wangyang.common.config;
 
-import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -11,13 +10,15 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @author y
+ */
 @Configuration
 @EnableSwagger2
-@EnableKnife4j
-public class Knife4jConfig {
+public class Swagger2Config {
 
     @Bean
-    public Docket createRestApi(){
+    public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo())
@@ -27,7 +28,7 @@ public class Knife4jConfig {
                 .build();
     }
 
-    public ApiInfo apiInfo(){
+    public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("swagger-bootstrap-ui RESTful APIs")
                 .description("swagger-bootstrap-ui")

@@ -27,7 +27,8 @@
         <snakeyaml-version>1.17</snakeyaml-version>
         <commons-io-version>2.4</commons-io-version>
         <kinfe4j-verison>2.0.0</kinfe4j-verison>
-        <springfox-swagger-ui-version>2.9.2</springfox-swagger-ui-version>
+        <springfox-swagger-version>2.9.2</springfox-swagger-version>
+        <metadata-extractor-version>2.7.2</metadata-extractor-version>
     </properties>
 
     <dependencies>
@@ -97,15 +98,21 @@
             <artifactId>cos_api</artifactId>
             <version>${cos-sdk-version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>${kinfe4j-verison}</version>
+        <dependency><!--添加Swagger依赖 -->
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger-version}</version>
         </dependency>
-        <dependency>
+        <dependency><!--添加Swagger-UI依赖 -->
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger-ui-version}</version>
+            <version>${springfox-swagger-version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor -->
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+            <version>${metadata-extractor-version}</version>
         </dependency>
 
     </dependencies>

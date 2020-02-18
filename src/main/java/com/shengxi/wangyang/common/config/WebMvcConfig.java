@@ -9,6 +9,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/");
+//        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/");
     }
 }

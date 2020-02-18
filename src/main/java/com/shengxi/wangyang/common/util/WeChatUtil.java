@@ -60,7 +60,6 @@ public class WeChatUtil {
         logger.info("发起请求的url为：{}", url);
         HttpRequest get = HttpUtil.createGet(url);
         HttpResponse execute = get.execute();
-
         logger.info("响应的结果为: {}", execute);
         execute.close();
         return JSONUtil.parseObj(execute.body());
