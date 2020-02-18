@@ -27,7 +27,7 @@
         <snakeyaml-version>1.17</snakeyaml-version>
         <commons-io-version>2.4</commons-io-version>
         <kinfe4j-verison>2.0.0</kinfe4j-verison>
-        <springfox-swagger-version>2.9.2</springfox-swagger-version>
+        <springfox-swagger-version>2.7.0</springfox-swagger-version>
         <metadata-extractor-version>2.7.2</metadata-extractor-version>
     </properties>
 

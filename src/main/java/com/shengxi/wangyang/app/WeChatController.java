@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author y
  */
-@Api()
+@Api(value = "wechat控制器", tags = "微信小程序访问接口控制器")
 @RequestMapping("/wechat")
 @RestController
 public class WeChatController {
@@ -25,7 +25,7 @@ public class WeChatController {
 
     @GetMapping("/login")
     @ResponseBody
-    public ApiResponse login(@RequestParam String jsCode){
+    public ApiResponse login(@RequestParam String jsCode) {
         return customerService.login(jsCode);
     }
 

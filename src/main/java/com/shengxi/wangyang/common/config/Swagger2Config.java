@@ -6,6 +6,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -30,9 +31,10 @@ public class Swagger2Config {
 
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("swagger-bootstrap-ui RESTful APIs")
-                .description("swagger-bootstrap-ui")
-                .version("1.0")
+                .title("楚苓大妈的 swagger-bootstrap-ui RESTful APIs")
+                .description("楚苓大妈的 swagger-bootstrap-ui")
+                .contact(new Contact("楚苓大妈的儿砸", "chuling.com", "chuling@chulingdama.com"))
+                .version("7.4")
                 .build();
 
     }
