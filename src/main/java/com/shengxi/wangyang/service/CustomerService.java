@@ -2,6 +2,7 @@ package com.shengxi.wangyang.service;
 
 
 import com.shengxi.wangyang.entity.vo.ApiResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户服务层对外接口
@@ -21,4 +22,11 @@ public interface CustomerService {
      */
     ApiResponse login(String jsCode);
 
+    /**
+     * 上传照片
+     *
+     * @param jsCode
+     * @param uploadFiles 照片文件数组
+     */
+    void uploadFiles(String jsCode, MultipartFile[] uploadFiles);
 }
