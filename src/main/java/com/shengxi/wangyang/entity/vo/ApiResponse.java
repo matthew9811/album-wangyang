@@ -20,6 +20,12 @@ public class ApiResponse {
         this.data = data;
     }
 
+    public ApiResponse(Status status, Object data) {
+        this.code = status.code;
+        this.message = status.standardMessage;
+        this.data = data;
+    }
+
     public ApiResponse() {
 
         this.code = Status.SUCCESS.getCode();
@@ -61,6 +67,7 @@ public class ApiResponse {
     public static ApiResponse ofMessage(int code, String message) {
         return new ApiResponse(code, message, null);
     }
+
 
     public static ApiResponse ofSuccess(Object data) {
         return new ApiResponse(Status.SUCCESS.getCode(), Status.SUCCESS.getStandardMessage(), data);

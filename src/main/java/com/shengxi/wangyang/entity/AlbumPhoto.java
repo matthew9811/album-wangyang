@@ -1,11 +1,15 @@
 package com.shengxi.wangyang.entity;
 
 import java.io.Serializable;
+import java.util.List;
+import lombok.Data;
 
 /**
  * album_photo
- * @author 
+ *
+ * @author
  */
+@Data
 public class AlbumPhoto implements Serializable {
     /**
      * id
@@ -13,38 +17,22 @@ public class AlbumPhoto implements Serializable {
     private Integer id;
 
     /**
-     * ç…§ç‰‡id
+     * 照片id
      */
     private Integer photoId;
 
     /**
-     * ç›¸å†Œid
+     * 相册id
      */
     private Integer albumId;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 相册
+     */
+    private List<Photo> photos;
+    /**
+     * 相册名称
+     */
+    private String albumName;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getPhotoId() {
-        return photoId;
-    }
-
-    public void setPhotoId(Integer photoId) {
-        this.photoId = photoId;
-    }
-
-    public Integer getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(Integer albumId) {
-        this.albumId = albumId;
-    }
 }

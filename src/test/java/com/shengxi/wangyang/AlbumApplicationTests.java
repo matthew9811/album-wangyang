@@ -46,21 +46,22 @@ public class AlbumApplicationTests {
     }
 
     @Test
-    public void testGetAddress(){
-        Object localAddress = AtlaUtil.getLocalAddress("39.984154,116.307490");
+    public void testGetAddress() {
+        //纬度， 经度
+        String localAddress = AtlaUtil.getLocalAddress("39.984154,116.307490");
+//        System.out.println(((JSONObject)localAddress.get("result")).get("ad_info"));
         System.out.println(localAddress);
-        System.out.println();
     }
 
     @Test
-    public void testGetWechatApi(){
+    public void testGetWechatApi() {
         JSONObject loginSession = WeChatUtil.getLoginSession("033HnHQ127txcT0f8QQ12JpoQ12HnHQz");
         System.out.println(loginSession);
     }
 
     @Test
     public void testExifUtil() throws ImageProcessingException, IOException {
-        File file =  new File("D:/浏览器下载/风景1.jpg");
+        File file = new File("D:/浏览器下载/风景1.jpg");
         String[] strings = ExifUitl.readExif(file);
         for (String string : strings) {
             System.out.println(string);

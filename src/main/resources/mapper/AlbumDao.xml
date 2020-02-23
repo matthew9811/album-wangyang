@@ -1,76 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shengxi.wangyang.mapper.AlbumDao">
-  <resultMap id="BaseResultMap" type="com.shengxi.wangyang.entity.Album">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, customer_id, create_time, update_time
+    <resultMap id="BaseResultMap" type="com.shengxi.wangyang.entity.Album">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="album_name" javaType="STRING" property="albumName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, customer_id, create_time, update_time, album_name
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from album
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from album
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAlbumListByOpenId" resultType="com.shengxi.wangyang.entity.Album">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM album
+        WHERE customer_id = ( SELECT
+        id
+        FROM customer
+        WHERE openid = #{openId})
+    </select>
+    <select id="selectByName" resultType="java.lang.Integer">
+       SELECT
+	    count(album_name)
+        FROM
+	    album
+        WHERE
+	    album_name = #{albumName}
+    </select>
+    <select id="selectIdByName" resultType="java.lang.Integer">
+        select id from album where  album_name = #{albumName}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from album
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Album" useGeneratedKeys="true">
-    insert into album (customer_id, create_time, update_time
+    <delete id="deleteByIdList">
+        delete from album where id in
+        <foreach collection="albumIds" index="index" item="albumId" separator="," open="(" close=")">
+            #{albumId}
+        </foreach>
+    </delete>
+    <insert id="insertByName">
+      insert into album (customer_id, create_time, update_time, album_name
       )
-    values (#{customerId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+    values ((select id  from customer where openid = #{openId}), now(), now(), #{albumName}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.Album" useGeneratedKeys="true">
-    insert into album
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="customerId != null">
-        customer_id,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="customerId != null">
-        #{customerId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.shengxi.wangyang.entity.Album">
-    update album
-    <set>
-      <if test="customerId != null">
-        customer_id = #{customerId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.shengxi.wangyang.entity.Album">
-    update album
-    set customer_id = #{customerId,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

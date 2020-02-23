@@ -40,6 +40,12 @@ gaode:
 logging:
   config: classpath:log/logback-spring.xml
   path: /log
+  level:
+    com:
+      onepro:
+        mapper: debug
+        custom:
+          mapper: debug
 atla:
   # 腾讯地图请求的url
   url: https://apis.map.qq.com/ws/geocoder/v1?
@@ -59,5 +65,4 @@ knife4j:
     enable: false
     username: wangyang
     password: 123456
-
 

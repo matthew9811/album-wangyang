@@ -2,11 +2,14 @@ package com.shengxi.wangyang.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
  * album
- * @author 
+ *
+ * @author
  */
+@Data
 public class Album implements Serializable {
     /**
      * id
@@ -14,51 +17,21 @@ public class Album implements Serializable {
     private Integer id;
 
     /**
-     * æ‹¥æœ‰è€…id
+     * 用户id
      */
     private Integer customerId;
 
     /**
-     * åˆ›å»ºæ—¶é—´
+     * 创建时间
      */
     private Date createTime;
 
     /**
-     * æ›´æ–°æ—¶é—´(é»˜è®¤ä¸ºåˆ›å»ºæ—¶é—´)
+     * 更新时间
      */
     private Date updateTime;
-
-    private static final long serialVersionUID = 1L;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+    /**
+     * 相册名称
+     */
+    private String albumName;
 }

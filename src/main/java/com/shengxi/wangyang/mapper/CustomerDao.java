@@ -17,11 +17,11 @@ public interface CustomerDao {
      */
     int insert(String openid);
 
-    int insertSelective(Customer record);
 
     Customer selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Customer record);
 
-    int updateByPrimaryKey(Customer record);
+    int judgeIsExist(String openid);
+
+    Integer selectIdByJsCode(String openId);
 }

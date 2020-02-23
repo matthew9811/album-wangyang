@@ -1,6 +1,12 @@
 package com.shengxi.wangyang.common.util;
 
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -57,10 +63,12 @@ public class AtlaUtil {
      * @param location string x,y
      * @return string 参考地址
      */
-    public static Object getLocalAddress(String location) {
+    public static String getLocalAddress(String location) {
         String url = mapUrl.concat("key=" + key + "&" + "location=" + location);
-
-        return (LinkedHashMap)HttpUtil.getRequestForUrl(url);
+        HttpRequest get = HttpUtil.createGet(url);
+        HttpResponse execute = get.execute();
+        String body = execute.body();
+        return JSONUtil.parseObj(body).getJSONObject("result").getJSONObject("ad_info").getStr("name");
     }
 
 
