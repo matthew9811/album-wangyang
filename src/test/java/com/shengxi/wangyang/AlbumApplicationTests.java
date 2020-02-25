@@ -67,7 +67,7 @@ public class AlbumApplicationTests {
             System.out.println(string);
         }
 
-
     }
+
 
 }

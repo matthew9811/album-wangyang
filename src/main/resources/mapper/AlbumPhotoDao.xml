@@ -78,7 +78,7 @@
     </insert>
     <insert id="replaceAlbumPhoto">
         REPLACE INTO album_photo ( album_id, photo_id ) values
-        <foreach collection="photoIds" index="index" item=" photoId" separator="," >
+        <foreach collection="photoIds" index="index" item="photoId" separator="," >
             ( #{albumId}, #{photoId})
         </foreach>
     </insert>

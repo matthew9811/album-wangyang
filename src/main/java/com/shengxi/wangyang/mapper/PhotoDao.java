@@ -49,4 +49,10 @@ public interface PhotoDao {
     int deleteByAlbumsIdList(Integer[] ids);
 
     Integer insertByList(List<Photo> list);
+
+    /**
+     * get all date for table
+     * @return list
+     */
+    List<Date> selectPhotoFimingTime();
 }

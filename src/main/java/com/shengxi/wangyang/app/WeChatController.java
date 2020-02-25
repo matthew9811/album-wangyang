@@ -62,13 +62,12 @@ public class WeChatController {
     @GetMapping("/getPhotoList")
     @ApiOperation(value = "获取图片列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime", value = "获取列表的开始时间，默认为当前时间", required = true),
-            @ApiImplicitParam(name = "endTime", value = "列表的结束时间分隔", required = true),
-            @ApiImplicitParam(name = "jsCode", value = "jsCode", required = true)
+            @ApiImplicitParam(name = "startTime", value = "获取列表的开始时间，默认为当前时间.如果第一次传递时候，不要传递时分秒，其余的直接返回即可", required = true),
+            @ApiImplicitParam(name = "pageNum", value = "页码，默认为1， 往后+1", required = true, paramType = "Integer"),
+            @ApiImplicitParam(name = "openId", value = "openId", required = true)
     })
-    public List<Photo> getPhotoList(@RequestParam("startTime") Date startTime, @RequestParam("endTime")
-            Date endTime, @RequestParam("openId") String openId) {
-        return customerService.getPhotoList(startTime, endTime, openId);
+    public ApiResponse getPhotoList(@RequestParam("startTime") Date startTime, @RequestParam("pageNum") Integer pageNum, @RequestParam("openId") String openId) {
+        return customerService.getPhotoList(startTime, pageNum,openId);
     }
 
     @GetMapping("/getAlbumList")

@@ -3,7 +3,6 @@ package com.shengxi.wangyang.service;
 
 import com.shengxi.wangyang.entity.Album;
 import com.shengxi.wangyang.entity.AlbumPhoto;
-import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import java.util.Date;
 import java.util.List;
@@ -40,11 +39,11 @@ public interface CustomerService {
      * 根据opendid获取时间区间内的照片
      *
      * @param startTime startTime
-     * @param endTime   endTime
+     * @param pageNum
      * @param openId    openId
      * @return list of selected photos
      */
-    List<Photo> getPhotoList(Date startTime, Date endTime, String openId);
+    ApiResponse getPhotoList(Date startTime, Integer pageNum, String openId);
 
     /**
      * get all albums with same openId

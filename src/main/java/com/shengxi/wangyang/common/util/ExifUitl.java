@@ -5,6 +5,7 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.sun.imageio.plugins.jpeg.JPEGImageReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;

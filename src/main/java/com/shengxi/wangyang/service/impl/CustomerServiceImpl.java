@@ -1,5 +1,6 @@
 package com.shengxi.wangyang.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
@@ -23,8 +24,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
+    private static Integer pageSize = 5;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -86,7 +91,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * 上传文件，并实现保存到cos，同时将对应的信息保存进数据库
-     *  @param openId      用户唯一标识
+     *
+     * @param openId      用户唯一标识
      * @param uploadFiles 照片文件数组
      * @return a result
      */
@@ -107,16 +113,28 @@ public class CustomerServiceImpl implements CustomerService {
                 //MultipartFile转file
                 File tempFile = File.createTempFile(KeyUtil.getKey(), FileTypeUtil.getType(uploadFile.getInputStream()));
                 uploadFile.transferTo(tempFile);
+                //读取exif数据
                 String[] strings = ExifUitl.readExif(tempFile);
+                Date filmingTime;
                 Photo photo = new Photo();
+                //对exif数据进行判断
+                if (strings[2] != null) {
+                    filmingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strings[2]);
+                } else {
+                    filmingTime = new Date();
+                }
+                if (strings[0] != null && strings[1] != null) {
+                    //经度
+                    String lng = ExifUitl.pointToDegree(strings[0]);
+                    //纬度
+                    String lat = ExifUitl.pointToDegree(strings[1]);
+                    photo.setArea(AtlaUtil.getLocalAddress(lat + "," + lng));
+                } else {
+                    photo.setArea("中国，广东省， 广东东软学院");
+                }
                 photo.setCustomerId(customerId);
-                photo.setFilmingTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strings[2]));
+                photo.setFilmingTime(filmingTime);
                 photo.setUploadTime(new Date());
-                //经度
-                String lng = ExifUitl.pointToDegree(strings[0]);
-                //纬度
-                String lat = ExifUitl.pointToDegree(strings[1]);
-                photo.setArea(AtlaUtil.getLocalAddress(lat + "," + lng));
                 photo.setLink(CosUtil.upload(tempFile, ".".concat(FileTypeUtil.getType(tempFile))));
                 list.add(photo);
             } catch (IOException e) {
@@ -139,13 +157,47 @@ public class CustomerServiceImpl implements CustomerService {
      * 根据opendid获取时间区间内的照片
      *
      * @param startTime startTime
-     * @param endTime   endTime
+     * @param pageNum   page number
      * @param openId    openId
      * @return list of selected photos
      */
     @Override
-    public List<Photo> getPhotoList(Date startTime, Date endTime, String openId) {
-        return photoDao.selectPhotoList(startTime, endTime, openId);
+    public ApiResponse getPhotoList(Date startTime, Integer pageNum, String openId) {
+        Date endTime = new Date();
+        //创建结果集
+        Map<Date, List<Photo>> result = new ConcurrentHashMap<>(CustomerServiceImpl.pageSize);
+        List<Date> dates = photoDao.selectPhotoFimingTime();
+        //第一次访问
+        if (pageNum.equals(1)) {
+            //取第一个
+            startTime = dates.get(0);
+            if (dates.size() >= CustomerServiceImpl.pageSize) {
+                endTime = dates.get(4);
+            } else {
+                endTime = dates.get(dates.size() - 1);
+            }
+        } else {
+            //非第一次访问
+            endTime = dates.get(pageNum * CustomerServiceImpl.pageSize - 1 > dates.size() ? dates.size() - 1
+                    : pageNum * CustomerServiceImpl.pageSize - 1);
+        }
+        List<Photo> list = photoDao.selectPhotoList(startTime, endTime, openId);
+        for (Photo obj : list) {
+            List<Photo> temp;
+            if (result.containsKey(obj.getFilmingTime())) {
+                temp = result.get(obj.getFilmingTime());
+                temp.add(obj);
+                result.put(obj.getFilmingTime(), temp);
+            } else {
+                temp = new ArrayList<>();
+                temp.add(obj);
+                result.put(obj.getFilmingTime(), temp);
+            }
+        }
+        Map<String, Object> data = new ConcurrentHashMap<>(2);
+        data.put("result", result);
+        data.put("nextTime", endTime);
+        return new ApiResponse(200, "请求成功!", data);
     }
 
     /**

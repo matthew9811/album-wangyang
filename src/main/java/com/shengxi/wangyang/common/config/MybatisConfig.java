@@ -15,7 +15,7 @@ public class MybatisConfig {
      * @return SqlStatementInterceptor
      */
     @Bean
-    @ConditionalOnProperty(name = "rs.showSql", havingValue = "true")
+    @ConditionalOnProperty(name = "wangyang.showSql", havingValue = "true")
     SqlStatementInterceptor sqlStatementInterceptor() {
         return new SqlStatementInterceptor();
     }

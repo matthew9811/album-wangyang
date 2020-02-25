@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shengxi.wangyang.mapper.PhotoDao">
     <resultMap id="BaseResultMap" type="com.shengxi.wangyang.entity.Photo">
-        <id column="photo_id" jdbcType="INTEGER" property="id"/>
-        <result column="photo_link" jdbcType="VARCHAR" property="link"/>
-        <result column="photo_customer_id" jdbcType="INTEGER" property="customerId"/>
-        <result column="photo_upload_time" jdbcType="TIMESTAMP" property="uploadTime"/>
-        <result column="photo_area" jdbcType="VARCHAR" property="area"/>
-        <result column="photo_filming_time" jdbcType="DATE" property="filmingTime"/>
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="link" jdbcType="VARCHAR" property="link"/>
+        <result column="customerId" jdbcType="INTEGER" property="customerId"/>
+        <result column="uploadTime" jdbcType="TIMESTAMP" property="uploadTime"/>
+        <result column="area" jdbcType="VARCHAR" property="area"/>
+        <result column="filmingTime" jdbcType="DATE" property="filmingTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    photo.id as photo_id, photo.link as photo_link, photo.customer_id as photo_customer_id, 
-    photo.upload_time as photo_upload_time, photo.area as photo_area, photo.filming_time as photo_filming_time
+    photo.id as id, photo.link as link, photo.customer_id as customerId,
+    photo.upload_time as uploadTime, photo.area as area, photo.filming_time as filmingTime
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -26,7 +26,15 @@
         photo
         WHERE
         customer_id = ( SELECT id FROM customer WHERE openid = #{openId} )
-        AND filming_time BETWEEN DATE_FORMAT(#{startTime}, "%Y %m %d") AND DATE_FORMAT(#{endTime}, "%Y %m %d")
+        AND filming_time BETWEEN DATE_FORMAT(#{startTime}, "%Y-%m-%d") AND DATE_FORMAT(#{endTime}, "%Y-%m-%d")
+    </select>
+    <select id="selectPhotoFimingTime" resultType="java.util.Date">
+        SELECT
+	    filming_time
+        FROM
+	    `photo`
+        ORDER BY
+	    filming_time ASC
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from photo
@@ -94,10 +102,11 @@
     </insert>
     <insert id="insertByList" parameterType="com.shengxi.wangyang.entity.Photo" keyColumn="id" useGeneratedKeys="true">
         insert into photo (link, customer_id, upload_time,
-      area, filming_time) values
-      <foreach collection="list" index="index" item="photo" separator="," open="(" close=")">
-          (#{photo.link}, #{photo.customerId}, now(), #{photo.area}, #{photo.filmingTime})
-      </foreach>
+        area, filming_time) values
+        <foreach collection="list" index="index" item="photo" separator=",">
+            (#{photo.link},
+            #{photo.customerId}, now(), #{photo.area}, #{photo.filmingTime})
+        </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.shengxi.wangyang.entity.Photo">
         update photo
