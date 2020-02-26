@@ -11,7 +11,6 @@ import com.shengxi.wangyang.common.util.ExifUitl;
 import com.shengxi.wangyang.common.util.KeyUtil;
 import com.shengxi.wangyang.common.util.WeChatUtil;
 import com.shengxi.wangyang.entity.Album;
-import com.shengxi.wangyang.entity.AlbumPhoto;
 import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import com.shengxi.wangyang.mapper.AlbumDao;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +117,7 @@ public class CustomerServiceImpl implements CustomerService {
                 Photo photo = new Photo();
                 //对exif数据进行判断
                 if (strings[2] != null) {
-                    filmingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strings[2]);
+                    filmingTime = new SimpleDateFormat("yyyy:MM:dd").parse(strings[2]);
                 } else {
                     filmingTime = new Date();
                 }
@@ -164,6 +162,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ApiResponse getPhotoList(Date tempTime, Integer pageNum, String openId) {
         Date startTime,endTime;
+        Map<String, Object> data = new ConcurrentHashMap<>(2);
         //创建结果集
         Map<Date, List<Photo>> result = new ConcurrentHashMap<>(CustomerServiceImpl.pageSize);
         List<Date> timeList = photoDao.selectPhotoFimingTime();
@@ -181,6 +180,11 @@ public class CustomerServiceImpl implements CustomerService {
             //非第一次访问
             endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
                     : pageNum * CustomerServiceImpl.pageSize - 1);
+            //末端
+            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime))){
+                data.put("result", "到尽头了");
+                return new ApiResponse(217, "请求成功!", data);
+            }
         }
         List<Photo> list = photoDao.selectPhotoList(startTime, endTime, openId);
         for (Photo obj : list) {
@@ -195,7 +199,6 @@ public class CustomerServiceImpl implements CustomerService {
                 result.put(obj.getFilmingTime(), temp);
             }
         }
-        Map<String, Object> data = new ConcurrentHashMap<>(2);
         data.put("result", result);
         data.put("nextTime", endTime);
         return new ApiResponse(200, "请求成功!", data);
@@ -219,8 +222,9 @@ public class CustomerServiceImpl implements CustomerService {
      * @return all detail
      */
     @Override
-    public List<AlbumPhoto> getAlbumDetail(Integer albumId) {
-        return albumPhotoDao.selectAlbumDatailByAlbumId(albumId);
+    public List<Photo> getAlbumDetail(Integer albumId) {
+        List<Photo> albumPhotos = albumPhotoDao.selectAlbumDatailByAlbumId(albumId);
+        return albumPhotos;
     }
 
     /**

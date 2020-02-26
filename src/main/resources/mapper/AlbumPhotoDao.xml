@@ -30,29 +30,9 @@
             #{albumId}
         </foreach>
     </delete>
-    <select id="selectAlbumDatailByAlbumId" resultType="com.shengxi.wangyang.entity.AlbumPhoto">
-    SELECT
-	a.id,
-	a.album_name
-	ap_p.area,
-	ap_p.id,
-	ap_p.filming_time,
-	ap_p.link,
-	ap_p.upload_time
-	FROM
-	album AS a
-	LEFT JOIN (
-	SELECT
-		ap.album_id,
-		p.area,
-		p.id,
-		p.filming_time,
-		p.link,
-		p.upload_time
-	FROM
-		album_photo AS ap
-	LEFT JOIN photo p ON ap.photo_id = p.id
-	) AS ap_p ON a.id = ap_p.album_id
+    <select id="selectAlbumDatailByAlbumId" resultType="com.shengxi.wangyang.entity.Photo">
+    SELECT * from photo WHERE id in
+    (SELECT photo_id from album_photo WHERE album_id = #{albumId})
   </select>
 
 

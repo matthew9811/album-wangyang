@@ -39,7 +39,7 @@ public interface PhotoDao {
      * @param ids ids[]
      * @return a result is number of deleted
      */
-    int deleteByIdList(Integer[] ids);
+    int deleteByIdList(@Param("ids") Integer[] ids);
 
     /**
      * Delete the corresponding data in the selected list
@@ -47,7 +47,7 @@ public interface PhotoDao {
      * @param ids ids[]
      * @return a result is number of deleted
      */
-    int deleteByAlbumsIdList(Integer[] ids);
+    int deleteByAlbumsIdList(@Param("ids") Integer[] ids);
 
     Integer insertByList(List<Photo> list);
 

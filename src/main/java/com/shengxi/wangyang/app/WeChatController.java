@@ -80,7 +80,7 @@ public class WeChatController {
     @GetMapping("/getAlbumDetail")
     @ApiOperation(value = "获取相册详情")
     @ApiImplicitParam(name = "albumId", value = "相册id", required = true, dataTypeClass = Integer.class)
-    public List<AlbumPhoto> getAlbumDetail(Integer albumId) {
+    public List<Photo> getAlbumDetail(Integer albumId) {
         return customerService.getAlbumDetail(albumId);
     }
 

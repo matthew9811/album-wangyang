@@ -2,7 +2,7 @@ package com.shengxi.wangyang.service;
 
 
 import com.shengxi.wangyang.entity.Album;
-import com.shengxi.wangyang.entity.AlbumPhoto;
+import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +59,7 @@ public interface CustomerService {
      * @param albumId id
      * @return all detail
      */
-    List<AlbumPhoto> getAlbumDetail(Integer albumId);
+    List<Photo> getAlbumDetail(Integer albumId);
 
     /**
      * create a album and return this result

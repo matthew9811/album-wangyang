@@ -59,15 +59,15 @@ public class AlbumApplicationTests {
         System.out.println(loginSession);
     }
 
-    @Test
-    public void testExifUtil() throws ImageProcessingException, IOException {
-        File file = new File("D:/浏览器下载/风景1.jpg");
-        String[] strings = ExifUitl.readExif(file);
-        for (String string : strings) {
-            System.out.println(string);
-        }
-
-    }
+//    @Test
+//    public void testExifUtil() throws ImageProcessingException, IOException {
+//        File file = new File("D:/浏览器下载/风景1.jpg");
+//        String[] strings = ExifUitl.readExif(file);
+//        for (String string : strings) {
+//            System.out.println(string);
+//        }
+//
+//    }
 
 
 }

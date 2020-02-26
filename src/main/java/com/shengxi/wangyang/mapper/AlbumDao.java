@@ -33,7 +33,7 @@ public interface AlbumDao {
      */
     int insertByName(@Param("openId") String openId, @Param("albumName") String albumName);
 
-    int deleteByIdList(Integer[] albumIds);
+    int deleteByIdList(@Param("albumIds") Integer[] albumIds);
 
     Integer selectIdByName(String albumName);
 

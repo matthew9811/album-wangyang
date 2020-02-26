@@ -26,6 +26,10 @@ spring:
             show-allow: true
   jmx:
     default-domain: wangyang
+  servlet:
+    multipart:
+      max-file-size: 2048Mb
+      max-request-size: 2048Mb
 server:
   servlet:
     context-path: /wangyang
@@ -71,4 +75,3 @@ knife4j:
     password: 123456
 wangyang:
   showSql: true
-
