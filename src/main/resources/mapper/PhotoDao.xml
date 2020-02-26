@@ -24,15 +24,26 @@
         <include refid="Base_Column_List"/>
         FROM
         photo
-        WHERE
-        customer_id = ( SELECT id FROM customer WHERE openid = #{openId} )
-        AND filming_time BETWEEN DATE_FORMAT(#{startTime}, "%Y-%m-%d") AND DATE_FORMAT(#{endTime}, "%Y-%m-%d")
+        <where>
+
+            <if test="startTime != null and endTime != null">
+                filming_time BETWEEN
+                <!--DATE_FORMAT(#{startTime}, "%Y-%m-%d") AND DATE_FORMAT(#{endTime}, "%Y-%m-%d")-->
+                #{startTime} AND #{endTime}
+            </if>
+            <if test="openId != null">
+                AND customer_id = ( SELECT id FROM customer WHERE openid = #{openId} )
+            </if>
+        </where>
+
     </select>
     <select id="selectPhotoFimingTime" resultType="java.util.Date">
         SELECT
 	    filming_time
         FROM
 	    `photo`
+	    GROUP BY
+		filming_time
         ORDER BY
 	    filming_time ASC
     </select>

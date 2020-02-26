@@ -30,7 +30,8 @@ public interface PhotoDao {
      * @param openId    openId
      * @return list Of selected Photo
      */
-    List<Photo> selectPhotoList(@Param("startTime") Date startTime, @Param("endTime") Date endTime, @Param("openId") String openId);
+    List<Photo> selectPhotoList(@Param("startTime") Date startTime,
+                                @Param("endTime") Date endTime, @Param("openId") String openId);
 
     /**
      * Delete the corresponding data in the selected list

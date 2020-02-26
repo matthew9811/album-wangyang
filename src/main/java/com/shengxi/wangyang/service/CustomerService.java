@@ -38,12 +38,12 @@ public interface CustomerService {
     /**
      * 根据opendid获取时间区间内的照片
      *
-     * @param startTime startTime
+     * @param tempTime startTime
      * @param pageNum
      * @param openId    openId
      * @return list of selected photos
      */
-    ApiResponse getPhotoList(Date startTime, Integer pageNum, String openId);
+    ApiResponse getPhotoList(Date tempTime, Integer pageNum, String openId);
 
     /**
      * get all albums with same openId

@@ -10,6 +10,7 @@ import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMap;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
@@ -57,16 +58,17 @@ public class SqlStatementInterceptor implements Interceptor {
             /* 获取节点的配置 */
             Configuration configuration = ms.getConfiguration();
             /* 获取到最终的 sql语句 */
-            printSql(configuration, boundSql, sqlId, time);
+            printSql(configuration, boundSql, parameter, sqlId, time);
         } catch (Exception e) {
             logger.error("sql拦截异常:{} ", e.getMessage());
         }
         return returnValue;
     }
 
-    private void printSql(Configuration configuration, BoundSql boundSql, String sqlId, long time) {
+    private void printSql(Configuration configuration, BoundSql boundSql, Object parameterMap, String sqlId, long time) {
         String sql = showSql(configuration, boundSql);
         logger.info("[SQL语句Id]>>>> {}", sqlId);
+        logger.info("[params]>>>{}", parameterMap);
         logger.info("[SQL语句耗时]>>>> {} ms", time);
         logger.info("[SQL语句]>>>> {}", sql);
     }

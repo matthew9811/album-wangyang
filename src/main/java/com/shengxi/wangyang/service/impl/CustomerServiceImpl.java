@@ -156,29 +156,30 @@ public class CustomerServiceImpl implements CustomerService {
     /**
      * 根据opendid获取时间区间内的照片
      *
-     * @param startTime startTime
+     * @param tempTime tempTime
      * @param pageNum   page number
      * @param openId    openId
      * @return list of selected photos
      */
     @Override
-    public ApiResponse getPhotoList(Date startTime, Integer pageNum, String openId) {
-        Date endTime = new Date();
+    public ApiResponse getPhotoList(Date tempTime, Integer pageNum, String openId) {
+        Date startTime,endTime;
         //创建结果集
         Map<Date, List<Photo>> result = new ConcurrentHashMap<>(CustomerServiceImpl.pageSize);
-        List<Date> dates = photoDao.selectPhotoFimingTime();
+        List<Date> timeList = photoDao.selectPhotoFimingTime();
         //第一次访问
         if (pageNum.equals(1)) {
             //取第一个
-            startTime = dates.get(0);
-            if (dates.size() >= CustomerServiceImpl.pageSize) {
-                endTime = dates.get(4);
+            startTime = timeList.get(0);
+            if (timeList.size() >= CustomerServiceImpl.pageSize) {
+                endTime = timeList.get(4);
             } else {
-                endTime = dates.get(dates.size() - 1);
+                endTime = timeList.get(timeList.size() - 1);
             }
         } else {
+            startTime = tempTime;
             //非第一次访问
-            endTime = dates.get(pageNum * CustomerServiceImpl.pageSize - 1 > dates.size() ? dates.size() - 1
+            endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
                     : pageNum * CustomerServiceImpl.pageSize - 1);
         }
         List<Photo> list = photoDao.selectPhotoList(startTime, endTime, openId);

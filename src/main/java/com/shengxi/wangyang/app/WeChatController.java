@@ -62,12 +62,12 @@ public class WeChatController {
     @GetMapping("/getPhotoList")
     @ApiOperation(value = "获取图片列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime", value = "获取列表的开始时间，默认为当前时间.如果第一次传递时候，不要传递时分秒，其余的直接返回即可", required = true),
+            @ApiImplicitParam(name = "tempTime", value = "获取列表的开始时间，默认为当前时间.如果第一次传递时候，不要传递时分秒，其余的直接返回即可", required = true),
             @ApiImplicitParam(name = "pageNum", value = "页码，默认为1， 往后+1", required = true, paramType = "Integer"),
             @ApiImplicitParam(name = "openId", value = "openId", required = true)
     })
-    public ApiResponse getPhotoList(@RequestParam("startTime") Date startTime, @RequestParam("pageNum") Integer pageNum, @RequestParam("openId") String openId) {
-        return customerService.getPhotoList(startTime, pageNum,openId);
+    public ApiResponse getPhotoList(@RequestParam("tempTime") Date tempTime, @RequestParam("pageNum") Integer pageNum, @RequestParam("openId") String openId) {
+        return customerService.getPhotoList(tempTime, pageNum,openId);
     }
 
     @GetMapping("/getAlbumList")
@@ -100,7 +100,7 @@ public class WeChatController {
             @ApiImplicitParam(name = "albumName", value = "相册名称", required = true),
             @ApiImplicitParam(name = "photoIds", value = "照片id", required = true, paramType = "Integer")
     })
-    public ApiResponse editAlbumPhoto(String albumName, Integer[] photoIds) {
+    public ApiResponse editAlbumPhoto(@RequestParam("albumName") String albumName, @RequestParam("photoIds") Integer[] photoIds) {
         return customerService.editAlbumPhoto(albumName, photoIds);
 
     }
@@ -110,7 +110,7 @@ public class WeChatController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ids", value = "照片id的数组", required = true, dataTypeClass = Integer.class)
     })
-    public ApiResponse deletePhotos(Integer[] ids) {
+    public ApiResponse deletePhotos(@RequestParam("ids") Integer[] ids) {
         return customerService.deletePhotos(ids);
     }
 
