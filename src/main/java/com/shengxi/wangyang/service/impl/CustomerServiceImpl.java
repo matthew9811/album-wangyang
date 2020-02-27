@@ -155,13 +155,13 @@ public class CustomerServiceImpl implements CustomerService {
      * 根据opendid获取时间区间内的照片
      *
      * @param tempTime tempTime
-     * @param pageNum   page number
-     * @param openId    openId
+     * @param pageNum  page number
+     * @param openId   openId
      * @return list of selected photos
      */
     @Override
     public ApiResponse getPhotoList(Date tempTime, Integer pageNum, String openId) {
-        Date startTime,endTime;
+        Date startTime, endTime;
         Map<String, Object> data = new ConcurrentHashMap<>(2);
         //创建结果集
         Map<Date, List<Photo>> result = new ConcurrentHashMap<>(CustomerServiceImpl.pageSize);
@@ -181,7 +181,7 @@ public class CustomerServiceImpl implements CustomerService {
             endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
                     : pageNum * CustomerServiceImpl.pageSize - 1);
             //末端
-            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime))){
+            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime))) {
                 data.put("result", "到尽头了");
                 return new ApiResponse(217, "请求成功!", data);
             }
@@ -222,9 +222,22 @@ public class CustomerServiceImpl implements CustomerService {
      * @return all detail
      */
     @Override
-    public List<Photo> getAlbumDetail(Integer albumId) {
+    public Map<Date, List<Photo>> getAlbumDetail(Integer albumId) {
         List<Photo> albumPhotos = albumPhotoDao.selectAlbumDatailByAlbumId(albumId);
-        return albumPhotos;
+        Map<Date, List<Photo>> result = new ConcurrentHashMap<>(photoDao.selectPhotoFimingTime().size());
+        albumPhotos.forEach(obj -> {
+            List<Photo> temp;
+            if (result.containsKey(obj.getFilmingTime())) {
+                temp = result.get(obj.getFilmingTime());
+                temp.add(obj);
+                result.put(obj.getFilmingTime(), temp);
+            } else {
+                temp = new ArrayList<>();
+                temp.add(obj);
+                result.put(obj.getFilmingTime(), temp);
+            }
+        });
+        return result;
     }
 
     /**

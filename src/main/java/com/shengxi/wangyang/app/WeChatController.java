@@ -2,7 +2,6 @@ package com.shengxi.wangyang.app;
 
 
 import com.shengxi.wangyang.entity.Album;
-import com.shengxi.wangyang.entity.AlbumPhoto;
 import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import com.shengxi.wangyang.service.CustomerService;
@@ -13,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +80,7 @@ public class WeChatController {
     @GetMapping("/getAlbumDetail")
     @ApiOperation(value = "获取相册详情")
     @ApiImplicitParam(name = "albumId", value = "相册id", required = true, dataTypeClass = Integer.class)
-    public List<Photo> getAlbumDetail(Integer albumId) {
+    public Map<Date, List<Photo>> getAlbumDetail(Integer albumId) {
         return customerService.getAlbumDetail(albumId);
     }
 

@@ -20,22 +20,16 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class CosUtil {
 
-    //    @Value("${cos.tengxun.accessKey}")
     private static String accessKey;
 
-    //    @Value("${cos.tengxun.secretKey}")
     private static String secretKey;
 
-    //    @Value("${cos.tengxun.bucket}")
     private static String bucket;
 
-    //    @Value("${cos.tengxun.bucketName}")
     private static String bucketName;
 
-    //    @Value("${cos.tengxun.path}")
     private static String path;
 
-    //    @Value("${cos.tengxun.prefix}")
     private static String prefix;
 
     private static COSClient cosClient;

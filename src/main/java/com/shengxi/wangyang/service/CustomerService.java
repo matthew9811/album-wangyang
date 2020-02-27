@@ -6,6 +6,7 @@ import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -59,7 +60,7 @@ public interface CustomerService {
      * @param albumId id
      * @return all detail
      */
-    List<Photo> getAlbumDetail(Integer albumId);
+    Map<Date, List<Photo>> getAlbumDetail(Integer albumId);
 
     /**
      * create a album and return this result
