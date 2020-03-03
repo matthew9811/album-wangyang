@@ -2,11 +2,9 @@ package com.shengxi.wangyang.service;
 
 
 import com.shengxi.wangyang.entity.Album;
-import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -57,10 +55,13 @@ public interface CustomerService {
     /**
      * get an album detail by a unique albumId
      *
+     *
      * @param albumId id
+     * @param tempTime tempTime
+     * @param pageNum pageNum
      * @return all detail
      */
-    Map<Date, List<Photo>> getAlbumDetail(Integer albumId);
+    ApiResponse getAlbumDetail(Integer albumId, Date tempTime, Integer pageNum);
 
     /**
      * create a album and return this result

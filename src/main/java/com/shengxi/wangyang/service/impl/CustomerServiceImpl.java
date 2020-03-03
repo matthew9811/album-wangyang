@@ -44,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
     private static Integer pageSize = 5;
+    private static String judgeFlag = "result";
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -161,46 +162,15 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public ApiResponse getPhotoList(Date tempTime, Integer pageNum, String openId) {
-        Date startTime, endTime;
-        Map<String, Object> data = new ConcurrentHashMap<>(2);
         //创建结果集
-        Map<Date, List<Photo>> result = new ConcurrentHashMap<>(CustomerServiceImpl.pageSize);
         List<Date> timeList = photoDao.selectPhotoFimingTime();
-        //第一次访问
-        if (pageNum.equals(1)) {
-            //取第一个
-            startTime = timeList.get(0);
-            if (timeList.size() >= CustomerServiceImpl.pageSize) {
-                endTime = timeList.get(4);
-            } else {
-                endTime = timeList.get(timeList.size() - 1);
-            }
+        Map<String, Object> data = pageHelper(pageNum, timeList, tempTime);
+        if (!data.containsKey(CustomerServiceImpl.judgeFlag)) {
+            data.put("result", sortList(photoDao.selectPhotoList((Date) data.get("startTime"),
+                    (Date) data.get("endTime"), openId), CustomerServiceImpl.pageSize));
         } else {
-            startTime = tempTime;
-            //非第一次访问
-            endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
-                    : pageNum * CustomerServiceImpl.pageSize - 1);
-            //末端
-            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime))) {
-                data.put("result", "到尽头了");
-                return new ApiResponse(217, "请求成功!", data);
-            }
+            return new ApiResponse(217, "请求成功!", data);
         }
-        List<Photo> list = photoDao.selectPhotoList(startTime, endTime, openId);
-        for (Photo obj : list) {
-            List<Photo> temp;
-            if (result.containsKey(obj.getFilmingTime())) {
-                temp = result.get(obj.getFilmingTime());
-                temp.add(obj);
-                result.put(obj.getFilmingTime(), temp);
-            } else {
-                temp = new ArrayList<>();
-                temp.add(obj);
-                result.put(obj.getFilmingTime(), temp);
-            }
-        }
-        data.put("result", result);
-        data.put("nextTime", endTime);
         return new ApiResponse(200, "请求成功!", data);
     }
 
@@ -218,27 +188,23 @@ public class CustomerServiceImpl implements CustomerService {
     /**
      * get an album detail by a unique albumId
      *
-     * @param albumId id
+     * @param albumId  id
+     * @param tempTime tempTime
+     * @param pageNum  pageNum
      * @return all detail
      */
     @Override
-    public Map<Date, List<Photo>> getAlbumDetail(Integer albumId) {
-        List<Photo> albumPhotos = albumPhotoDao.selectAlbumDatailByAlbumId(albumId);
-        Map<Date, List<Photo>> result = new ConcurrentHashMap<>(photoDao.selectPhotoFimingTime().size());
-        albumPhotos.forEach(obj -> {
-            List<Photo> temp;
-            if (result.containsKey(obj.getFilmingTime())) {
-                temp = result.get(obj.getFilmingTime());
-                temp.add(obj);
-                result.put(obj.getFilmingTime(), temp);
-            } else {
-                temp = new ArrayList<>();
-                temp.add(obj);
-                result.put(obj.getFilmingTime(), temp);
-            }
-        });
-        return result;
+    public ApiResponse getAlbumDetail(Integer albumId, Date tempTime, Integer pageNum) {
+        //获取时间列表
+        Map<String, Object> data = pageHelper(pageNum, albumPhotoDao.selectPhotoFimingTime(albumId), tempTime);
+        if (!data.containsKey(CustomerServiceImpl.judgeFlag)) {
+            data.put("result", sortList(albumPhotoDao.selectAlbumDatailByAlbumId(albumId, (Date) data.get("startTime"), (Date) data.get("endTime")), CustomerServiceImpl.pageSize));
+        } else {
+            return new ApiResponse(217, "请求成功!", data);
+        }
+        return new ApiResponse(200, "请求成功!", data);
     }
+
 
     /**
      * create a album and return this result
@@ -305,5 +271,51 @@ public class CustomerServiceImpl implements CustomerService {
         Integer id = albumDao.selectIdByName(albumName);
         albumPhotoDao.replaceAlbumPhoto(id, photoIds);
         return ApiResponse.ofStatus(ApiResponse.Status.SUCCESS);
+    }
+
+
+    private Map<Date, List<Photo>> sortList(List<Photo> albumPhotos, Integer pageSize) {
+        Map<Date, List<Photo>> result = new ConcurrentHashMap<>(pageSize);
+        albumPhotos.forEach(obj -> {
+            List<Photo> temp;
+            if (result.containsKey(obj.getFilmingTime())) {
+                temp = result.get(obj.getFilmingTime());
+                temp.add(obj);
+                result.put(obj.getFilmingTime(), temp);
+            } else {
+                temp = new ArrayList<>();
+                temp.add(obj);
+                result.put(obj.getFilmingTime(), temp);
+            }
+        });
+        return result;
+    }
+
+    private Map<String, Object> pageHelper(Integer pageNum, List<Date> timeList, Date tempTime) {
+        Map<String, Object> data = new ConcurrentHashMap<>(4);
+        Date startTime, endTime;
+        //第一次访问
+        if (pageNum.equals(1)) {
+            //取第一个
+            startTime = timeList.get(0);
+            if (timeList.size() >= CustomerServiceImpl.pageSize) {
+                endTime = timeList.get(4);
+            } else {
+                endTime = timeList.get(timeList.size() - 1);
+            }
+        } else {
+            startTime = DateUtil.offsetDay(tempTime, 1);
+            //非第一次访问
+            endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
+                    : pageNum * CustomerServiceImpl.pageSize - 1);
+            //末端
+            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime))) {
+                data.put("result", "到尽头了");
+            }
+        }
+        data.put("startTime", startTime);
+        data.put("endTime", endTime);
+        data.put("tempTime", endTime);
+        return data;
     }
 }

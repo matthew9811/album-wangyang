@@ -31,9 +31,29 @@
         </foreach>
     </delete>
     <select id="selectAlbumDatailByAlbumId" resultType="com.shengxi.wangyang.entity.Photo">
-    SELECT * from photo WHERE id in
-    (SELECT photo_id from album_photo WHERE album_id = #{albumId})
+    SELECT * from photo
+    <where>
+        id in
+        (SELECT photo_id from album_photo WHERE album_id = #{albumId})
+        <if test="startTime != null and endTime != null">
+            AND filming_time BETWEEN
+            #{startTime} AND #{endTime}
+        </if>
+    </where>
+        ORDER BY filming_time ASC
   </select>
+    <select id="selectPhotoFimingTime" resultType="java.util.Date">
+        SELECT
+	    filming_time
+        FROM
+	    `photo`
+	    WHERE
+	        customer_id = ( SELECT customer_id FROM album WHERE id = #{albumId} )
+	    GROUP BY
+		filming_time
+        ORDER BY
+	    filming_time ASC
+    </select>
 
 
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shengxi.wangyang.entity.AlbumPhoto"

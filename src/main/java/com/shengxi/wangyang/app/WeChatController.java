@@ -67,7 +67,7 @@ public class WeChatController {
             @ApiImplicitParam(name = "openId", value = "openId", required = true)
     })
     public ApiResponse getPhotoList(@RequestParam("tempTime") Date tempTime, @RequestParam("pageNum") Integer pageNum, @RequestParam("openId") String openId) {
-        return customerService.getPhotoList(tempTime, pageNum,openId);
+        return customerService.getPhotoList(tempTime, pageNum, openId);
     }
 
     @GetMapping("/getAlbumList")
@@ -79,9 +79,15 @@ public class WeChatController {
 
     @GetMapping("/getAlbumDetail")
     @ApiOperation(value = "获取相册详情")
-    @ApiImplicitParam(name = "albumId", value = "相册id", required = true, dataTypeClass = Integer.class)
-    public Map<Date, List<Photo>> getAlbumDetail(Integer albumId) {
-        return customerService.getAlbumDetail(albumId);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "albumId", value = "相册id", required = true, dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "tempTime", value = "获取列表的开始时间，默认为当前时间.如果第一次传递时候，不要传递时分秒，其余的直接返回即可",
+                    required = true, paramType = "Date"),
+            @ApiImplicitParam(name = "pageNum", value = "页码，默认为1， 往后+1", required = true, paramType = "Integer"),
+    })
+    public ApiResponse getAlbumDetail(@RequestParam("albumId") Integer albumId,
+                                                 @RequestParam("tempTime") Date tempTime, @RequestParam("pageNum") Integer pageNum) {
+        return customerService.getAlbumDetail(albumId, tempTime, pageNum);
     }
 
     @GetMapping("/createAlbum")
