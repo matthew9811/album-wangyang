@@ -162,14 +162,25 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public ApiResponse getPhotoList(Date tempTime, Integer pageNum, String openId) {
+        Map<Date, List<Photo>> dateListMap;
+        Map<String, Object> data;
         //创建结果集
         List<Date> timeList = photoDao.selectPhotoFimingTime();
-        Map<String, Object> data = pageHelper(pageNum, timeList, tempTime);
-        if (!data.containsKey(CustomerServiceImpl.judgeFlag)) {
-            data.put("result", sortList(photoDao.selectPhotoList((Date) data.get("startTime"),
-                    (Date) data.get("endTime"), openId), CustomerServiceImpl.pageSize));
-        } else {
-            return new ApiResponse(217, "请求成功!", data);
+        while (true) {
+            data = pageHelper(pageNum, timeList, tempTime);
+            if (!data.containsKey(CustomerServiceImpl.judgeFlag)) {
+                dateListMap = sortList(photoDao.selectPhotoList((Date) data.get("startTime"),
+                        (Date) data.get("endTime"), openId), CustomerServiceImpl.pageSize);
+                if (dateListMap.isEmpty()) {
+                    tempTime = (Date) data.get("endTime");
+                    pageNum++;
+                } else {
+                    data.put("result", dateListMap);
+                    break;
+                }
+            } else {
+                return new ApiResponse(217, "请求成功!", data);
+            }
         }
         return new ApiResponse(200, "请求成功!", data);
     }
@@ -196,11 +207,23 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ApiResponse getAlbumDetail(Integer albumId, Date tempTime, Integer pageNum) {
         //获取时间列表
-        Map<String, Object> data = pageHelper(pageNum, albumPhotoDao.selectPhotoFimingTime(albumId), tempTime);
-        if (!data.containsKey(CustomerServiceImpl.judgeFlag)) {
-            data.put("result", sortList(albumPhotoDao.selectAlbumDatailByAlbumId(albumId, (Date) data.get("startTime"), (Date) data.get("endTime")), CustomerServiceImpl.pageSize));
-        } else {
-            return new ApiResponse(217, "请求成功!", data);
+        Map<Date, List<Photo>> result;
+        Map<String, Object> data;
+        List<Date> dates = albumPhotoDao.selectPhotoFimingTime(albumId);
+        while (true) {
+            data = pageHelper(pageNum, dates, tempTime);
+            if (!data.containsKey(CustomerServiceImpl.judgeFlag)) {
+                result = sortList(albumPhotoDao.selectAlbumDatailByAlbumId(albumId, (Date) data.get("startTime"), (Date) data.get("endTime")), CustomerServiceImpl.pageSize);
+                if (result.isEmpty()) {
+                    tempTime = (Date) data.get("endTime");
+                    pageNum++;
+                } else {
+                    data.put("result", result);
+                    break;
+                }
+            } else {
+                return new ApiResponse(217, "请求成功!", data);
+            }
         }
         return new ApiResponse(200, "请求成功!", data);
     }
@@ -309,7 +332,8 @@ public class CustomerServiceImpl implements CustomerService {
             endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
                     : pageNum * CustomerServiceImpl.pageSize - 1);
             //末端
-            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime))) {
+            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime)) ||
+                    com.shengxi.wangyang.common.util.DateUtil.compare_date(startTime, endTime)) {
                 data.put("result", "到尽头了");
             }
         }
