@@ -67,12 +67,14 @@ public class CustomerServiceImpl implements CustomerService {
      * 保存openid到数据库
      *
      * @param jsCode 临时的jscode
+     * @param secret
+     * @param appid 临时的jscode
      * @return ApiResponse 授权信息
      */
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = false)
-    public ApiResponse login(String jsCode) {
-        JSONObject loginSession = WeChatUtil.getLoginSession(jsCode);
+    public ApiResponse login(String jsCode, String secret, String appid) {
+        JSONObject loginSession = WeChatUtil.getLoginSession(jsCode, secret, appid);
         String openid = loginSession.getStr("openid");
         if (ObjectUtil.isNotNull(openid)) {
             int num = customerDao.judgeIsExist(openid);

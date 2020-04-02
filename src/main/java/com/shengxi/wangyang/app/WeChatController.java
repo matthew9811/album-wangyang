@@ -2,7 +2,6 @@ package com.shengxi.wangyang.app;
 
 
 import com.shengxi.wangyang.entity.Album;
-import com.shengxi.wangyang.entity.Photo;
 import com.shengxi.wangyang.entity.vo.ApiResponse;
 import com.shengxi.wangyang.service.CustomerService;
 import io.swagger.annotations.Api;
@@ -12,9 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,20 +28,22 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(value = "wechat控制器", tags = "微信小程序访问接口控制器")
 public class WeChatController {
 
-    private Logger logger = LoggerFactory.getLogger(WeChatController.class);
-
     @Autowired
     private CustomerService customerService;
 
 
-    @GetMapping("/login")
-    @ApiImplicitParam(name = "jsCode", required = true, paramType = "body", value = "唯一的jsCode")
+    @PostMapping("/login")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsCode", required = true, paramType = "body", value = "唯一的jsCode"),
+            @ApiImplicitParam(name = "secret", value = "小程序密钥", required = true),
+            @ApiImplicitParam(name = "appid", value = "appid", required = true)
+    })
     @ApiResponses(
             {@io.swagger.annotations.ApiResponse(code = 404, message = "找不到对应的页面"),
                     @io.swagger.annotations.ApiResponse(code = 200, message = "授权成功")}
     )
-    public ApiResponse login(@RequestParam String jsCode) {
-        return customerService.login(jsCode);
+    public ApiResponse login(String jsCode, String secret, String appid) {
+        return customerService.login(jsCode, secret, appid);
     }
 
 
@@ -86,7 +84,7 @@ public class WeChatController {
             @ApiImplicitParam(name = "pageNum", value = "页码，默认为1， 往后+1", required = true, paramType = "Integer"),
     })
     public ApiResponse getAlbumDetail(@RequestParam("albumId") Integer albumId,
-                                                 @RequestParam("tempTime") Date tempTime, @RequestParam("pageNum") Integer pageNum) {
+                                      @RequestParam("tempTime") Date tempTime, @RequestParam("pageNum") Integer pageNum) {
         return customerService.getAlbumDetail(albumId, tempTime, pageNum);
     }
 

@@ -29,6 +29,7 @@
         <kinfe4j-verison>2.0.0</kinfe4j-verison>
         <springfox-swagger-version>2.7.0</springfox-swagger-version>
         <metadata-extractor-version>2.7.2</metadata-extractor-version>
+        <tencentcloud-sdk-java-version>3.1.7</tencentcloud-sdk-java-version>
     </properties>
 
     <dependencies>
@@ -115,6 +116,13 @@
             <version>${metadata-extractor-version}</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.tencentcloudapi</groupId>-->
+<!--            <artifactId>tencentcloud-sdk-java</artifactId>-->
+<!--            &lt;!&ndash; go to https://search.maven.org/search?q=tencentcloud-sdk-java and get the latest version. &ndash;&gt;-->
+<!--            &lt;!&ndash; 请到https://search.maven.org/search?q=tencentcloud-sdk-java查询最新版本 &ndash;&gt;-->
+<!--            <version>${tencentcloud-sdk-java-version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <repositories>

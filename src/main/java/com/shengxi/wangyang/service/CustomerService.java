@@ -22,8 +22,10 @@ public interface CustomerService {
      * 实现登录
      *
      * @param jsCode 临时的jscode
+     * @param secret secret
+     * @param appid appid
      */
-    ApiResponse login(String jsCode);
+    ApiResponse login(String jsCode, String secret, String appid);
 
     /**
      * 上传照片

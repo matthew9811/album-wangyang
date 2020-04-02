@@ -22,14 +22,6 @@ public class WeChatUtil {
 
     private static Logger logger = LoggerFactory.getLogger(WeChatUtil.class);
     /**
-     * appid
-     */
-    private static String appid;
-    /**
-     * 密钥
-     */
-    private static String secret;
-    /**
      * 授权类型
      */
     private static String grantType;
@@ -42,8 +34,6 @@ public class WeChatUtil {
         YamlPropertiesFactoryBean factoryBean = new YamlPropertiesFactoryBean();
         factoryBean.setResources(new ClassPathResource("application-tengxun.yml"));
         Properties properties = factoryBean.getObject();
-        appid = properties.getProperty("tengxun.wechat.appid");
-        secret = properties.getProperty("tengxun.wechat.secret");
         grantType = properties.getProperty("tengxun.wechat.grant_type");
         wechatApiUrl = properties.getProperty("tengxun.wechat.url");
     }
@@ -54,7 +44,7 @@ public class WeChatUtil {
      *
      * @return
      */
-    public static JSONObject getLoginSession(String jsCode) {
+    public static JSONObject getLoginSession(String jsCode, String secret, String appid) {
         String url = wechatApiUrl + "?appid=" + appid + "&" + "secret=" + secret + "&"
                 + "js_code=" + jsCode + "&" + "gramt_type=" + grantType;
         logger.info("发起请求的url为：{}", url);
