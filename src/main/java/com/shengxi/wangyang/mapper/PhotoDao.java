@@ -56,4 +56,6 @@ public interface PhotoDao {
      * @return list
      */
     List<Date> selectPhotoFimingTime();
+
+    List<Photo> search(@Param("temp") String temp, @Param("openid") String openid);
 }

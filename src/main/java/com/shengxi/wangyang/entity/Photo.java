@@ -2,11 +2,17 @@ package com.shengxi.wangyang.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * photo
  * @author 
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Photo implements Serializable {
     /**
      * id
@@ -38,53 +44,7 @@ public class Photo implements Serializable {
      */
     private Date filmingTime;
 
+    private String trait;
+
     private static final long serialVersionUID = 1L;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public Integer getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
-    }
-
-    public Date getUploadTime() {
-        return uploadTime;
-    }
-
-    public void setUploadTime(Date uploadTime) {
-        this.uploadTime = uploadTime;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public Date getFilmingTime() {
-        return filmingTime;
-    }
-
-    public void setFilmingTime(Date filmingTime) {
-        this.filmingTime = filmingTime;
-    }
 }

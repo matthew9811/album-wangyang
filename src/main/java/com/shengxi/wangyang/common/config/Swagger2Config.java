@@ -31,9 +31,9 @@ public class Swagger2Config {
 
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("楚苓大妈的 swagger-bootstrap-ui RESTful APIs")
-                .description("楚苓大妈的 swagger-bootstrap-ui")
-                .contact(new Contact("楚苓大妈的儿砸", "chuling.com", "chuling@chulingdama.com"))
+                .title(" swagger-bootstrap-ui RESTful APIs")
+                .description(" swagger-bootstrap-ui")
+                .contact(new Contact("wang", "wang.com", "wang@wang.com"))
                 .version("7.4")
                 .build();
 

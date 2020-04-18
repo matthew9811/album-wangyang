@@ -99,6 +99,12 @@
             <artifactId>cos_api</artifactId>
             <version>${cos-sdk-version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.tencentcloudapi/tencentcloud-sdk-java -->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.1.27</version>
+        </dependency>
         <dependency><!--添加Swagger依赖 -->
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -116,7 +122,7 @@
             <version>${metadata-extractor-version}</version>
         </dependency>
 
-<!--        <dependency>-->
+        <!--        <dependency>-->
 <!--            <groupId>com.tencentcloudapi</groupId>-->
 <!--            <artifactId>tencentcloud-sdk-java</artifactId>-->
 <!--            &lt;!&ndash; go to https://search.maven.org/search?q=tencentcloud-sdk-java and get the latest version. &ndash;&gt;-->

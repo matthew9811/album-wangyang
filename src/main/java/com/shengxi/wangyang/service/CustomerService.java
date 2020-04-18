@@ -98,4 +98,12 @@ public interface CustomerService {
      * @return a result from edit
      */
     ApiResponse editAlbumPhoto(String albumName, Integer[] photoIds);
+
+    /**
+     * 搜索
+     * @param temp
+     * @param openid
+     * @return
+     */
+    ApiResponse search(String temp, String openid);
 }

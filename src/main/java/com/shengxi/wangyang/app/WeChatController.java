@@ -128,4 +128,10 @@ public class WeChatController {
         return customerService.deleteAlbums(ids);
     }
 
+    @ApiOperation("搜索")
+    @GetMapping("/search")
+    public ApiResponse search(String temp, String openid){
+        return customerService.search(temp, openid);
+    }
+
 }

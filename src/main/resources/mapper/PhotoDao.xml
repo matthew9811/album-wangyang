@@ -8,10 +8,12 @@
         <result column="uploadTime" jdbcType="TIMESTAMP" property="uploadTime"/>
         <result column="area" jdbcType="VARCHAR" property="area"/>
         <result column="filmingTime" jdbcType="DATE" property="filmingTime"/>
+        <result column="trait" jdbcType="VARCHAR" property="trait"/>
     </resultMap>
     <sql id="Base_Column_List">
     photo.id as id, photo.link as link, photo.customer_id as customerId,
-    photo.upload_time as uploadTime, photo.area as area, photo.filming_time as filmingTime
+    photo.upload_time as uploadTime, photo.area as area, photo.filming_time as filmingTime,
+    trait
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -25,11 +27,10 @@
         FROM
         photo
         <where>
-
             <if test="startTime != null and endTime != null">
-                filming_time BETWEEN
-                <!--DATE_FORMAT(#{startTime}, "%Y-%m-%d") AND DATE_FORMAT(#{endTime}, "%Y-%m-%d")-->
-                #{startTime} AND #{endTime}
+                filming_time <![CDATA[>=]]>
+                DATE_FORMAT(#{startTime}, "%Y-%m-%d")
+                AND  filming_time <![CDATA[<=]]> DATE_FORMAT(#{endTime}, "%Y-%m-%d")
             </if>
             <if test="openId != null">
                 AND customer_id = ( SELECT id FROM customer WHERE openid = #{openId} )
@@ -47,6 +48,23 @@
 		filming_time
         ORDER BY
 	    filming_time ASC
+    </select>
+    <select id="search" resultType="com.shengxi.wangyang.entity.Photo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        photo
+        <where>
+        1 = 1
+            <if test="openid != null">
+                AND customer_id = ( SELECT id FROM customer WHERE openid = #{openid} )
+            </if>
+            <if test="temp != null and temp != '' ">
+                and (trait LIKE "%"#{temp}"%"
+                OR filming_time LIKE "%"#{temp}"%" )
+            </if>
+            ORDER BY filming_time
+        </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from photo
@@ -114,10 +132,10 @@
     </insert>
     <insert id="insertByList" parameterType="com.shengxi.wangyang.entity.Photo" keyColumn="id" useGeneratedKeys="true">
         insert into photo (link, customer_id, upload_time,
-        area, filming_time) values
+        area, filming_time, trait) values
         <foreach collection="list" index="index" item="photo" separator=",">
             (#{photo.link},
-            #{photo.customerId}, now(), #{photo.area}, #{photo.filmingTime})
+            #{photo.customerId}, now(), #{photo.area}, #{photo.filmingTime}, #{photo.trait})
         </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.shengxi.wangyang.entity.Photo">

@@ -1,12 +1,14 @@
 package com.shengxi.wangyang.service.impl;
 
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import com.drew.imaging.ImageProcessingException;
 import com.shengxi.wangyang.common.util.AtlaUtil;
 import com.shengxi.wangyang.common.util.CosUtil;
+import com.shengxi.wangyang.common.util.DateUtil;
+import com.shengxi.wangyang.common.util.DetectLabelUtil;
 import com.shengxi.wangyang.common.util.ExifUitl;
 import com.shengxi.wangyang.common.util.KeyUtil;
 import com.shengxi.wangyang.common.util.WeChatUtil;
@@ -19,10 +21,12 @@ import com.shengxi.wangyang.mapper.CustomerDao;
 import com.shengxi.wangyang.mapper.PhotoDao;
 import com.shengxi.wangyang.service.CustomerService;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
      *
      * @param jsCode 临时的jscode
      * @param secret
-     * @param appid 临时的jscode
+     * @param appid  临时的jscode
      * @return ApiResponse 授权信息
      */
     @Override
@@ -137,6 +141,7 @@ public class CustomerServiceImpl implements CustomerService {
                 photo.setFilmingTime(filmingTime);
                 photo.setUploadTime(new Date());
                 photo.setLink(CosUtil.upload(tempFile, ".".concat(FileTypeUtil.getType(tempFile))));
+                photo.setTrait(String.valueOf(base64Util(tempFile)));
                 list.add(photo);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -298,6 +303,15 @@ public class CustomerServiceImpl implements CustomerService {
         return ApiResponse.ofStatus(ApiResponse.Status.SUCCESS);
     }
 
+    @Override
+    public ApiResponse search(String temp, String openid) {
+        List<Photo> photoList = photoDao.search(temp, openid);
+        if (photoList.isEmpty()) {
+            return ApiResponse.ofStatus(ApiResponse.Status.SUCCESS);
+        }
+        Map<Date, List<Photo>> dateListMap = sortList(photoList, photoList.size());
+        return new ApiResponse(ApiResponse.Status.SUCCESS, dateListMap);
+    }
 
     private Map<Date, List<Photo>> sortList(List<Photo> albumPhotos, Integer pageSize) {
         Map<Date, List<Photo>> result = new ConcurrentHashMap<>(pageSize);
@@ -334,14 +348,33 @@ public class CustomerServiceImpl implements CustomerService {
             endTime = timeList.get(pageNum * CustomerServiceImpl.pageSize - 1 > timeList.size() ? timeList.size() - 1
                     : pageNum * CustomerServiceImpl.pageSize - 1);
             //末端
-            if (DateUtil.formatDate(startTime).equals(DateUtil.formatDate(endTime)) ||
-                    com.shengxi.wangyang.common.util.DateUtil.compare_date(startTime, endTime)) {
+            if (DateUtil.compare_date(startTime, endTime)) {
                 data.put("result", "到尽头了");
             }
         }
+
         data.put("startTime", startTime);
         data.put("endTime", endTime);
         data.put("tempTime", endTime);
         return data;
     }
+
+    private StringBuilder base64Util(File upload) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(upload);
+        byte[] image = new byte[fileInputStream.available()];
+        int temp;
+        int len = 0;
+        while ((temp = fileInputStream.read()) != -1) {
+            image[len++] = (byte) temp;
+        }
+        String encode = Base64Encoder.encode(image);
+        String params = "{\"ImageBase64\":\"  " + encode + " \"}";
+        Collection<String> strings = DetectLabelUtil.detectLabel(params);
+        StringBuilder result = new StringBuilder();
+        strings.stream().forEach(k -> {
+            result.append(k + ",");
+        });
+        return result;
+    }
+
 }
