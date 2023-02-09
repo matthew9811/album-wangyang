@@ -28,7 +28,7 @@
         <commons-io-version>2.4</commons-io-version>
         <kinfe4j-verison>2.0.0</kinfe4j-verison>
         <springfox-swagger-version>2.7.0</springfox-swagger-version>
-        <metadata-extractor-version>2.7.2</metadata-extractor-version>
+        <metadata-extractor-version>2.18.0</metadata-extractor-version>
         <tencentcloud-sdk-java-version>3.1.7</tencentcloud-sdk-java-version>
     </properties>
 
